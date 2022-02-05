@@ -77,7 +77,7 @@ class List:
 		#cursor up one line
 		sys.stdout.write('\x1b[1A')
 
-	    #delete last line
+	    	#delete last line
 		sys.stdout.write('\x1b[2K')
 
 
