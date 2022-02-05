@@ -2,7 +2,6 @@
 
 import os
 
-
 from getkey import getkey, keys
 
 
@@ -37,6 +36,8 @@ class You:
 		elif key == keys.SPACE:
 			cd()
 
+		print(list())
+
 
 
 class List:
@@ -45,18 +46,26 @@ class List:
 		
 
 		self.list = [ name for name in os.listdir(self.path) if os.path.isdir(os.path.join(self.path, name)) ]
-		self.list[0] += " *"
+	
+		if len(self.list) != 0:
+
+			self.list[0] += " *"
+	
+
 	def print_list(self):
 		print(self.path)
 		for i in self.list:
 			print(i)
 
 	def put_the_star_on(self, index):
-		for i in self.list:
-			if i[-1] == "*":
-				self.list[self.list.index(i)] = self.list[self.list.index(i)][:-2:]
-		
-		self.list[index] += " *"
+		if len(self.list) != 0:
+			for i in self.list:
+				if i[-1] == "*":
+					self.list[self.list.index(i)] = self.list[self.list.index(i)][:-2:]
+			
+			self.list[index] += " *"
+
+
 
 	def change_back(self):
 		
@@ -68,16 +77,18 @@ class List:
 
 
 	def change_further(self, pointer):
-		os.system("clear")
-		self.path += "/" + self.list[pointer][:-2:]
-		self.list = [ name for name in os.listdir(self.path) if os.path.isdir(os.path.join(self.path, name)) ]
-		
+		if len(self.list) != 0:
+
+			os.system("clear")
+			self.path += "/" + self.list[pointer][:-2:]
+			self.list = [ name for name in os.listdir(self.path) if os.path.isdir(os.path.join(self.path, name)) ]
+			
 
 	def delete_line(self):
 		#cursor up one line
 		sys.stdout.write('\x1b[1A')
 
-	    	#delete last line
+		#delete last line
 		sys.stdout.write('\x1b[2K')
 
 
