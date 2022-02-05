@@ -1,0 +1,118 @@
+#!/usr/bin/python3
+
+import os
+import sys
+import time
+from getkey import getkey, keys
+
+
+class You:
+	def __init__(self):
+		self.pointer = 0
+
+
+
+
+	def move(self, length, further, back, star, cd):
+		key = getkey()
+
+		if key == keys.UP:
+			if self.pointer > 0:
+				self.pointer -= 1 
+				star(self.pointer)
+
+		elif key == keys.DOWN:
+			if self.pointer < length - 1:
+				self.pointer += 1
+				star(self.pointer)
+
+		elif key == keys.RIGHT:
+			further(self.pointer)
+			self.pointer = 0
+
+		elif key == keys.LEFT:
+			back()
+			self.pointer = 0
+
+		elif key == keys.SPACE:
+			cd()
+
+
+
+class List:
+	def __init__(self):
+		self.path = os.getcwd()
+		
+
+		self.list = [ name for name in os.listdir(self.path) if os.path.isdir(os.path.join(self.path, name)) ]
+		self.list[0] += " *"
+	def print_list(self):
+		print(self.path)
+		for i in self.list:
+			print(i)
+
+	def put_the_star_on(self, index):
+		for i in self.list:
+			if i[-1] == "*":
+				self.list[self.list.index(i)] = self.list[self.list.index(i)][:-2:]
+		
+		self.list[index] += " *"
+
+	def change_back(self):
+		
+		index = self.path.rfind("/")
+		self.path = self.path[0:index]
+		if self.path == "":
+			self.path += "/"
+		self.list = [ name for name in os.listdir(self.path) if os.path.isdir(os.path.join(self.path, name)) ]
+
+
+	def change_further(self, pointer):
+		os.system("clear")
+		self.path += "/" + self.list[pointer][:-2:]
+		self.list = [ name for name in os.listdir(self.path) if os.path.isdir(os.path.join(self.path, name)) ]
+		
+
+	def delete_line(self):
+		#cursor up one line
+		sys.stdout.write('\x1b[1A')
+
+	    #delete last line
+		sys.stdout.write('\x1b[2K')
+
+
+	def change_directory(self):
+		os.chdir(self.path)
+		os.system("/bin/zsh")
+
+
+
+class Program:
+	def __init__(self):
+		
+		self.list = List()
+		self.you = You()
+		
+	def reset_pointer(self, length):
+
+		self.you.pointer = 0
+
+
+
+
+	def mainloop(self):
+		os.system("clear")
+		while True:
+			
+			self.list.print_list()
+
+			self.you.move(len(self.list.list), 
+							  self.list.change_further, 
+							  self.list.change_back, 
+							  self.list.put_the_star_on, 
+							  self.list.change_directory)
+			os.system("clear")
+
+if __name__ == "__main__":
+	program = Program()
+	program.mainloop()
